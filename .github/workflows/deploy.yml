@@ -26,15 +26,6 @@ jobs:
 
       - name: Instalar paquetes
         run: flutter pub get
-- name: Configurar web
-
-  run: flutter create --platforms=web .
-
-- name: Crear versión web
-
-  run: flutter build web --release --base-href "/sajoma-casino/"
-      - name: Crear versión web
-        run: flutter build web --release --base-href "/sajoma-casino/"
 
       - name: Preparar página
         uses: actions/upload-pages-artifact@v3
