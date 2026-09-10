@@ -1,0 +1,49 @@
+name: Deploy SAJOMA CASINO Web
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v4
+
+      - name: Instalar Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Instalar paquetes
+        run: flutter pub get
+
+      - name: Crear versión web
+        run: flutter build web --release --base-href "/sajoma-casino/"
+
+      - name: Preparar página
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Publicar SAJOMA CASINO
+        id: deployment
+        uses: actions/deploy-pages@v4
