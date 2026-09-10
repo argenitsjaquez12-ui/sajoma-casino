@@ -1,0 +1,29 @@
+workflows:
+  sajoma-casino:
+    name: SAJOMA CASINO
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Generate Android and iOS projects
+        script: |
+          flutter create --platforms=android,ios .
+      - name: Get Flutter packages
+        script: |
+          flutter pub get
+      - name: Install iOS pods
+        script: |
+          if [ -f ios/Podfile ]; then cd ios && pod install; fi
+      - name: Build Android APK
+        script: |
+          flutter build apk --release
+      - name: Build iOS without code signing
+        script: |
+          flutter build ios --release --no-codesign
+    artifacts:
+      - build/app/outputs/flutter-apk/*.apk
+      - build/ios/iphoneos/**/*.app
+      - /tmp/xcodebuild_logs/*.log
