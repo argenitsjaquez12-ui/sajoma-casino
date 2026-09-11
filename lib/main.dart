@@ -176,7 +176,7 @@ class _CasinoState extends State<Casino> {
     }
     setState(() => bonus = true);
     move(500, 'Bono diario +500');
-    snack('Â¡Bono diario de 500 monedas!');
+    snack('¡Bono diario de 500 monedas!');
   }
 
   @override
@@ -200,7 +200,7 @@ class _CasinoState extends State<Casino> {
             padding: const EdgeInsets.only(right: 14),
             child: Center(
               child: Text(
-                'ðª $balance',
+                '🪙 $balance',
                 style: const TextStyle(color: gold, fontWeight: FontWeight.bold),
               ),
             ),
@@ -241,7 +241,7 @@ class _CasinoState extends State<Casino> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Bienvenido, $name', style: const TextStyle(fontSize: 19, fontWeight: FontWeight.bold)),
-                      Text('Nivel $level â¢ $xp/100 XP', style: const TextStyle(color: Colors.white60)),
+                      Text('Nivel $level • $xp/100 XP', style: const TextStyle(color: Colors.white60)),
                     ],
                   ),
                 ),
@@ -258,7 +258,7 @@ class _CasinoState extends State<Casino> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text('SALDO VIRTUAL', style: TextStyle(color: Colors.white60, letterSpacing: 2)),
-                Text('$balance ðª', style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w900, color: gold)),
+                Text('$balance 🪙', style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w900, color: gold)),
                 const SizedBox(height: 6),
                 LinearProgressIndicator(value: xp / 100, minHeight: 7),
               ],
@@ -267,10 +267,10 @@ class _CasinoState extends State<Casino> {
         ),
         const SizedBox(height: 20),
         const Text('JUEGOS', style: TextStyle(color: gold, fontWeight: FontWeight.w900, letterSpacing: 2)),
-        game('ð°', 'Tragamonedas', 'Premio hasta 1,000', slots),
-        game('ð¡', 'Ruleta', 'Premio especial en 7', roulette),
-        game('ð', 'Blackjack', 'Contra la casa', blackjack),
-        game('â ï¸', 'PÃ³ker', 'Duelo virtual', poker),
+        game('🎰', 'Tragamonedas', 'Premio hasta 1,000', slots),
+        game('🎡', 'Ruleta', 'Premio especial en 7', roulette),
+        game('🃏', 'Blackjack', 'Contra la casa', blackjack),
+        game('♠️', 'Póker', 'Duelo virtual', poker),
       ],
     );
   }
@@ -296,24 +296,24 @@ class _CasinoState extends State<Casino> {
         const Text('TORNEOS Y MISIONES', style: TextStyle(color: gold, fontSize: 22, fontWeight: FontWeight.w900)),
         const SizedBox(height: 8),
         const Text('Completa objetivos para ganar XP y monedas virtuales.', style: TextStyle(color: Colors.white60)),
-        mission('ð', 'Bono diario', 'Reclama tu bono de hoy', bonus, claimBonus),
-        mission('ð°', 'Jugador activo', 'Juega 5 partidas', missions >= 5, () {
+        mission('🎁', 'Bono diario', 'Reclama tu bono de hoy', bonus, claimBonus),
+        mission('🎰', 'Jugador activo', 'Juega 5 partidas', missions >= 5, () {
           if (missions < 5) {
             setState(() => missions++);
-            move(0, 'MisiÃ³n: partida $missions/5');
+            move(0, 'Misión: partida $missions/5');
           } else {
-            snack('MisiÃ³n completada.');
+            snack('Misión completada.');
           }
         }),
-        mission('ð', 'Primera victoria', 'Gana una partida', wins > 0, () {
-          snack(wins > 0 ? 'Â¡Completada!' : 'Juega hasta conseguir una victoria.');
+        mission('🏆', 'Primera victoria', 'Gana una partida', wins > 0, () {
+          snack(wins > 0 ? '¡Completada!' : 'Juega hasta conseguir una victoria.');
         }),
         const SizedBox(height: 15),
         const Card(
           child: ListTile(
             leading: Icon(Icons.emoji_events, color: gold),
             title: Text('Torneo virtual semanal'),
-            subtitle: Text('ClasificaciÃ³n por XP â¢ Sin dinero real'),
+            subtitle: Text('Clasificación por XP • Sin dinero real'),
           ),
         ),
       ],
@@ -346,7 +346,7 @@ class _CasinoState extends State<Casino> {
         ListTile(leading: const Icon(Icons.star, color: gold), title: const Text('Experiencia'), trailing: Text('$xp / 100')),
         ListTile(leading: const Icon(Icons.edit, color: gold), title: const Text('Cambiar nombre'), onTap: editName),
         const SizedBox(height: 20),
-        const Center(child: Text('SAJOMA CASINO â¢ Entretenimiento virtual', style: TextStyle(color: Colors.white38))),
+        const Center(child: Text('SAJOMA CASINO • Entretenimiento virtual', style: TextStyle(color: Colors.white38))),
       ],
     );
   }
@@ -373,15 +373,60 @@ class _CasinoState extends State<Casino> {
     );
   }
 
+  void buyCoins() {
+    showDialog<void>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('COMPRAR MONEDAS'),
+        content: const Text(
+          'Monedas virtuales para jugar. No tienen valor monetario y no se pueden retirar.',
+        ),
+        actions: [
+          _coinPack('10,000', 10000, '0.99'),
+          _coinPack('50,000', 50000, '3.99'),
+          _coinPack('150,000', 150000, '9.99'),
+          _coinPack('500,000', 500000, '19.99'),
+        ],
+      ),
+    );
+  }
+
+  Widget _coinPack(String amount, int coins, String price) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 6),
+      child: SizedBox(
+        width: double.infinity,
+        child: FilledButton(
+          onPressed: () {
+            Navigator.pop(context);
+            // Demo: adds virtual coins. Connect Apple/Google billing
+            // before publishing real-money in-app purchases.
+            move(coins, 'Compra virtual: +$amount monedas');
+            snack('Se añadieron $amount monedas virtuales.');
+          },
+          child: Text('$amount monedas  •  \$$price'),
+        ),
+      ),
+    );
+  }
+
+  void offerCoinsAfterLoss() {
+    if (!mounted) return;
+    Future.delayed(const Duration(milliseconds: 250), () {
+      if (mounted) buyCoins();
+    });
+  }
+
   void slots() {
     if (balance < 100) {
-      snack('Necesitas al menos 100 monedas.');
+      snack('No tienes suficientes monedas.');
+      buyCoins();
       return;
     }
     showModalBottomSheet<void>(
       context: context,
       builder: (sheetContext) {
-        List<String> reels = ['ð', 'ð', '7ï¸â£'];
+        List<String> reels = ['🍒', '🍋', '7️⃣'];
         bool busy = false;
         return StatefulBuilder(
           builder: (context, update) {
@@ -400,7 +445,7 @@ class _CasinoState extends State<Casino> {
                         : () {
                             update(() => busy = true);
                             Future.delayed(const Duration(milliseconds: 500), () {
-                              final values = ['ð', 'ð', 'ð', 'â­', '7ï¸â£']..shuffle(rng);
+                              final values = ['🍒', '🍋', '🔔', '⭐', '7️⃣']..shuffle(rng);
                               final result = [values[0], values[1], values[2]];
                               final reward = result[0] == result[1] && result[1] == result[2]
                                   ? 1000
@@ -410,9 +455,10 @@ class _CasinoState extends State<Casino> {
                                 busy = false;
                               });
                               move(reward, 'Tragamonedas: ${reward >= 0 ? '+' : ''}$reward', win: reward > 0);
+                               if (reward < 0) offerCoinsAfterLoss();
                             });
                           },
-                    child: const Text('GIRAR â¢ 100 ðª'),
+                    child: const Text('GIRAR • 100 🪙'),
                   ),
                   const SizedBox(height: 8),
                 ],
@@ -426,7 +472,8 @@ class _CasinoState extends State<Casino> {
 
   void roulette() {
     if (balance < 100) {
-      snack('Necesitas al menos 100 monedas.');
+      snack('No tienes suficientes monedas.');
+      buyCoins();
       return;
     }
     showDialog<void>(
@@ -440,9 +487,10 @@ class _CasinoState extends State<Casino> {
               final number = rng.nextInt(37);
               final reward = number == 7 ? 500 : -100;
               move(reward, 'Ruleta: $number (${reward >= 0 ? '+' : ''}$reward)', win: reward > 0);
+               if (reward < 0) offerCoinsAfterLoss();
               Navigator.pop(context);
             },
-            child: const Text('JUGAR â¢ 100 ðª'),
+            child: const Text('JUGAR • 100 🪙'),
           ),
         ],
       ),
@@ -451,14 +499,15 @@ class _CasinoState extends State<Casino> {
 
   void blackjack() {
     if (balance < 100) {
-      snack('Necesitas al menos 100 monedas.');
+      snack('No tienes suficientes monedas.');
+      buyCoins();
       return;
     }
     showDialog<void>(
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('BLACKJACK'),
-        content: const Text('Partida rÃ¡pida virtual. Gana la mayor puntuaciÃ³n sin superar 21.'),
+        content: const Text('Partida rápida virtual. Gana la mayor puntuación sin superar 21.'),
         actions: [
           FilledButton(
             onPressed: () {
@@ -466,9 +515,10 @@ class _CasinoState extends State<Casino> {
               final house = 2 + rng.nextInt(20);
               final reward = player > 21 ? -100 : (house > 21 || player > house ? 100 : (player == house ? 0 : -100));
               move(reward, 'Blackjack: $player / $house (${reward >= 0 ? '+' : ''}$reward)', win: reward > 0);
+               if (reward < 0) offerCoinsAfterLoss();
               Navigator.pop(context);
             },
-            child: const Text('JUGAR â¢ 100 ðª'),
+            child: const Text('JUGAR • 100 🪙'),
           ),
         ],
       ),
@@ -477,24 +527,26 @@ class _CasinoState extends State<Casino> {
 
   void poker() {
     if (balance < 100) {
-      snack('Necesitas al menos 100 monedas.');
+      snack('No tienes suficientes monedas.');
+      buyCoins();
       return;
     }
     showDialog<void>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('PÃKER'),
-        content: const Text('Duelo virtual rÃ¡pido. Mayor fuerza gana.'),
+        title: const Text('PÓKER'),
+        content: const Text('Duelo virtual rápido. Mayor fuerza gana.'),
         actions: [
           FilledButton(
             onPressed: () {
               final player = 1 + rng.nextInt(100);
               final opponent = 1 + rng.nextInt(100);
               final reward = player > opponent ? 150 : (player == opponent ? 0 : -100);
-              move(reward, 'PÃ³ker: $player vs $opponent (${reward >= 0 ? '+' : ''}$reward)', win: reward > 0);
+              move(reward, 'Póker: $player vs $opponent (${reward >= 0 ? '+' : ''}$reward)', win: reward > 0);
+               if (reward < 0) offerCoinsAfterLoss();
               Navigator.pop(context);
             },
-            child: const Text('JUGAR â¢ 100 ðª'),
+            child: const Text('JUGAR • 100 🪙'),
           ),
         ],
       ),
@@ -509,7 +561,7 @@ class History extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (history.isEmpty) {
-      return const Center(child: Text('TodavÃ­a no hay movimientos.'));
+      return const Center(child: Text('Todavía no hay movimientos.'));
     }
     return ListView.builder(
       padding: const EdgeInsets.all(12),
