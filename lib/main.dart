@@ -280,7 +280,7 @@ class _CasinoState extends State<Casino> {
         game(Icons.casino, 'Tragamonedas', 'Gira y busca tres iguales', slots),
         game(Icons.album, 'Ruleta', 'Ruleta virtual', roulette),
         game(Icons.style, 'Blackjack', '21 contra la casa', blackjack),
-        game(Icons.casino, 'Poker', 'Duelo virtual', poker),
+        game(Icons.spade, 'Poker', 'Duelo virtual', poker),
         game(Icons.diamond, 'Baccarat', 'Jugador, banca o empate', baccarat),
         game(Icons.casino_outlined, 'Craps', 'Dados virtuales', craps),
         game(Icons.grid_3x3, 'Keno', 'Elige 10 numeros', keno),
